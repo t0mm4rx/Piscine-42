@@ -6,7 +6,7 @@
 /*   By: tmarx <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/16 14:43:28 by tmarx             #+#    #+#             */
-/*   Updated: 2019/07/18 19:02:12 by tmarx            ###   ########.fr       */
+/*   Updated: 2019/07/19 00:36:12 by tmarx            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	ft_display_file(char *file, char *program_name)
 {
 	int		fd;
 	int		n;
-	char	buffer[4096];
+	char	buffer[2];
 
 	fd = open(file, 0);
 	if (fd == -1)
@@ -44,22 +44,18 @@ void	ft_display_file(char *file, char *program_name)
 		ft_putstr(2, ": No such file or directory\n");
 		return ;
 	}
-	while ((n = read(fd, buffer, 4096)) > 0)
-	{
+	while ((n = read(fd, buffer, 2)) > 0)
 		write(1, buffer, n);
-	}
 	close(fd);
 }
 
 void	ft_display_stdin(void)
 {
 	int		n;
-	char	buffer[4096];
+	char	buffer[2];
 
-	while ((n = read(0, buffer, 4096)) > 0)
-	{
+	while ((n = read(0, buffer, 2)) > 0)
 		write(1, buffer, n);
-	}
 }
 
 int		main(int argc, char **argv)
