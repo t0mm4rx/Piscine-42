@@ -6,7 +6,7 @@
 /*   By: tmarx <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 00:19:24 by tmarx             #+#    #+#             */
-/*   Updated: 2019/07/17 23:39:16 by tmarx            ###   ########.fr       */
+/*   Updated: 2019/07/19 01:52:41 by tmarx            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	display_header(char *file)
 	ft_putstr(1, " <==\n");
 }
 
-int		file_length(char *file, int display_error)
+int		file_length(char *file, int display_error, char *program_name)
 {
 	int		fd;
 	int		res;
@@ -29,11 +29,14 @@ int		file_length(char *file, int display_error)
 	res = 0;
 	if ((fd = open(file, 0)) == -1)
 	{
-		if (display_error)
+		if (display_error > 0)
 		{
-			ft_putstr(2, "ft_tail: ");
+			ft_putstr(2, program_name);
+			ft_putstr(2, ": ");
 			ft_putstr(2, file);
-			ft_putstr(2, ": No such file or directory\n");
+			ft_putstr(2, ": No such file or directory");
+			if (display_error == 1)
+				ft_putstr(2, "\n");
 		}
 		return (-1);
 	}
@@ -42,7 +45,7 @@ int		file_length(char *file, int display_error)
 	return (res);
 }
 
-void	process_file(char *file, int does_display_header, int char_count)
+void	process_file(char *file, int ddh, int char_count, int i, char *pn)
 {
 	int		fd;
 	char	buffer[1];
@@ -51,9 +54,9 @@ void	process_file(char *file, int does_display_header, int char_count)
 	int		offset;
 
 	res = 0;
-	offset = file_length(file, 1) - char_count;
+	offset = file_length(file, 1 + i, pn) - char_count;
 	fd = open(file, 0);
-	if (does_display_header && fd != -1)
+	if (ddh && fd != -1)
 		display_header(file);
 	while ((n = read(fd, buffer, 1)) > 0)
 	{
@@ -83,9 +86,11 @@ void	ft_tail(int argc, char **argv)
 		i = 3;
 		while (i < argc)
 		{
-			if (i != 3 && file_length(argv[i], 0) != -1)
+			if (i != 3 && file_length(argv[i], 0, basename(argv[0])) != -1)
 				write(1, "\n", 1);
-			process_file(argv[i++], (argc > 4), char_count);
+			process_file(argv[i], (argc > 4), char_count, (i == 3),
+					basename(argv[0]));
+			i++;
 		}
 	}
 }
