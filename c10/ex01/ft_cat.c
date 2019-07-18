@@ -6,7 +6,7 @@
 /*   By: tmarx <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/16 14:43:28 by tmarx             #+#    #+#             */
-/*   Updated: 2019/07/16 16:14:19 by tmarx            ###   ########.fr       */
+/*   Updated: 2019/07/18 17:20:20 by tmarx            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	ft_display_file(char *file)
 	{
 		ft_putstr(2, "ft_cat: ");
 		ft_putstr(2, file);
-		ft_putstr(2, ": No such file or directory");
+		ft_putstr(2, ": No such file or directory\n");
 		return ;
 	}
 	while ((n = read(fd, buffer, 4096)) > 0)

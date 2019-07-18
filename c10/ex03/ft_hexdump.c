@@ -6,12 +6,11 @@
 /*   By: tmarx <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/16 18:32:52 by tmarx             #+#    #+#             */
-/*   Updated: 2019/07/17 13:16:45 by tmarx            ###   ########.fr       */
+/*   Updated: 2019/07/18 17:16:57 by tmarx            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
-#include <stdio.h>
 #include <fcntl.h>
 
 void	ft_print_address(int addr, int is_option_c)
@@ -75,18 +74,45 @@ void	ft_print_ascii(char buffer[16], int max_n)
 	write(1, "|", 1);
 }
 
-void	ft_print_memory(char *file, int is_option_c)
+void	ft_print_memory(char *file, int is_option_c, char *file_after, int a)
 {
 	int		fd;
 	char	buffer[16];
+	char	last_buffer[16];
 	int		data[3];
+	int		a;
 
 	data[0] = 0;
-	data[1] = 0;
+	a = 0;
 	fd = open(file, O_RDONLY);
+	if (fd == -1)
+	{
+		ft_putstr("ft_hexdump");
+		ft_putstr(": ");
+		ft_putstr(file);
+		ft_putstr(": ");
+		ft_putstr(strerror(errno));
+		write(1, "\n", 1);
+		return ;
+	}
 	while ((data[2] = read(fd, buffer, 16)) > 0)
 	{
-		ft(buffer, is_option_c, data);
+		if (data[2] < 16 && file_after[0] != '\0')
+		{
+			fd = open(1);
+			
+		}
+		if (buffer_cmp(last_buffer, buffer) == 0)
+		{
+			ft(buffer, is_option_c, data);
+			copy_buffer(last_buffer, buffer);
+			a = 0;
+		}
+		else
+		{
+			if (a++ == 0)
+				write(1, "*\n", 2);
+		}
 		data[0] += data[2];
 	}
 	ft_print_address(data[0], is_option_c);
@@ -97,17 +123,38 @@ int		main(int argc, char **argv)
 {
 	int i;
 	int is_option_c;
+	int valid_count;
+	int fd;
 
 	i = 1;
 	is_option_c = 0;
-	if (argv[1][0] == '-' && argv[1][1] == 'C' && argv[1][2] == '\0')
+	valid_count = 0;
+	if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 'C' &&
+			argv[1][2] == '\0')
 	{
 		i++;
 		is_option_c = 1;
 	}
+	if (argc == 1 + is_option_c)
+	{
+		ft_read_stdin(is_option_c);
+		return (0);
+	}
 	while (i < argc)
 	{
-		ft_print_memory(argv[i++], is_option_c);
+		if ((fd = open(argv[i], O_RDONLY)) != -1)
+			valid_count++;
+		close(fd);
+		ft_print_memory(argv[i], is_option_c);
+		if (valid_count == 0 && i == argc - 1)
+		{
+			ft_putstr("ft_hexdump");
+			ft_putstr(": ");
+			ft_putstr(argv[i]);
+			ft_putstr(": ");
+			ft_putstr("Bad file descriptor\n");
+		}
+		i++;
 	}
 	return (0);
 }

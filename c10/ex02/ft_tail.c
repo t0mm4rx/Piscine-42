@@ -6,7 +6,7 @@
 /*   By: tmarx <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/17 00:19:24 by tmarx             #+#    #+#             */
-/*   Updated: 2019/07/17 01:59:23 by tmarx            ###   ########.fr       */
+/*   Updated: 2019/07/17 23:39:16 by tmarx            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	display_header(char *file)
 	ft_putstr(1, " <==\n");
 }
 
-int		file_length(char *file)
+int		file_length(char *file, int display_error)
 {
 	int		fd;
 	int		res;
@@ -29,9 +29,12 @@ int		file_length(char *file)
 	res = 0;
 	if ((fd = open(file, 0)) == -1)
 	{
-		ft_putstr(2, "ft_tail: ");
-		ft_putstr(2, file);
-		ft_putstr(2, ": No such file or directory");
+		if (display_error)
+		{
+			ft_putstr(2, "ft_tail: ");
+			ft_putstr(2, file);
+			ft_putstr(2, ": No such file or directory\n");
+		}
 		return (-1);
 	}
 	while ((n = read(fd, buffer, 1)) > 0)
@@ -48,9 +51,9 @@ void	process_file(char *file, int does_display_header, int char_count)
 	int		offset;
 
 	res = 0;
-	offset = file_length(file) - char_count;
+	offset = file_length(file, 1) - char_count;
 	fd = open(file, 0);
-	if (does_display_header)
+	if (does_display_header && fd != -1)
 		display_header(file);
 	while ((n = read(fd, buffer, 1)) > 0)
 	{
@@ -65,18 +68,25 @@ void	ft_tail(int argc, char **argv)
 	int char_count;
 	int i;
 
-	if (argc < 4)
+	if (argc < 3)
 	{
-		ft_putstr(2, "File name missing.\n");
 		return ;
 	}
-	char_count = ft_atoi(argv[2]);
-	i = 3;
-	while (i < argc)
+	else if (argc == 3)
 	{
-		process_file(argv[i++], (argc > 4), char_count);
-		if (i != argc && (argc > 4))
-			write(1, "\n", 1);
+		ft_display_stdin(ft_atoi(argv[2]));
+		return ;
+	}
+	if (argv[1][0] == '-' && argv[1][1] == 'c' && argv[1][2] == '\0')
+	{
+		char_count = ft_atoi(argv[2]);
+		i = 3;
+		while (i < argc)
+		{
+			if (i != 3 && file_length(argv[i], 0) != -1)
+				write(1, "\n", 1);
+			process_file(argv[i++], (argc > 4), char_count);
+		}
 	}
 }
 

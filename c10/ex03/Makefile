@@ -1,6 +1,6 @@
 NAME = ft_hexdump
 OBJS = ${SRC:%.c=%.o}
-SRC = ft_hexdump.c ft_putnbr_base.c ft_strstr.c ft_char_is_printable.c ft_abs.c is_buffer_empty.c handle_buffer.c
+SRC = ft_hexdump.c ft_putnbr_base.c ft_strstr.c ft_char_is_printable.c ft_abs.c is_buffer_empty.c handle_buffer.c ft_read_stdin.c
 CFLAGS = -Wall -Wextra -Werror
 DEBUG = debug
 

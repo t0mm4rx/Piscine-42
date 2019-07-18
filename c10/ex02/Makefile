@@ -1,6 +1,6 @@
 NAME = ft_tail
 OBJS = ${SRC:%.c=%.o}
-SRC = ft_tail.c utils.c
+SRC = ft_tail.c utils.c ft_stdin.c
 CFLAGS = -Wall -Wextra -Werror
 DEBUG = debug
 

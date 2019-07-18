@@ -1,21 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   header.h                                           :+:      :+:    :+:   */
+/*   ft_stdin.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tmarx <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/17 00:43:10 by tmarx             #+#    #+#             */
-/*   Updated: 2019/07/17 23:37:51 by tmarx            ###   ########.fr       */
+/*   Created: 2019/07/17 23:02:14 by tmarx             #+#    #+#             */
+/*   Updated: 2019/07/17 23:41:41 by tmarx            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEADER_H
-# define HEADER_H
-# include <unistd.h>
-# include <fcntl.h>
+#include "header.h"
 
-int		ft_atoi(char *str);
-void	ft_putstr(int chan, char *str);
-void	ft_display_stdin(int char_count);
-#endif
+void	ft_display_stdin(int char_count)
+{
+	int		n;
+	char	buffer[32000];
+	int		i;
+
+	i = 0;
+	n = read(0, buffer, 32000);
+	while (i < n)
+	{
+		if (i >= n - char_count)
+			write(1, &buffer[i], 1);
+		i++;
+	}
+}
