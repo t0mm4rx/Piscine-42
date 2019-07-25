@@ -1,23 +1,24 @@
-NAME = ft_tail
-OBJS = ${SRC:%.c=%.o}
-SRC = ft_tail.c utils.c ft_stdin.c
-CFLAGS = -Wall -Wextra -Werror
-DEBUG = debug
+SRCS	=	${wildcard *.c}
+OBJS	=	${SRCS:.c=.o}
+CFLAGS	=	-Wall -Wextra -Werror
+CC		=	gcc
+RM		=	rm -f
+NAME	=	ft_tail
 
-all: ${NAME}
+.c.o	:
+				${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
-${NAME}: $(OBJS)
-	gcc -o ${NAME} ${OBJS}
+all		:	${OBJS}
+				${CC} ${FLAGS} ${OBJS} -o ${NAME}
 
-${DEBUG}:
-	gcc -o ${DEBUG} ${CFLAGS} -g -fsanitize=address ${SRC}
+clean	:
+				${RM} ${OBJS}
 
-clean:
-	rm -f ${OBJS}
+fclean	:	clean
+				${RM} ${NAME}
 
-fclean: clean
-	rm -f ${NAME}
-	rm -f ${DEBUG}
-	rm -Rf *.dSYM
+${NAME} :	all
 
-re: fclean all
+re		:	fclean all
+
+.PHONY	:	all clean fclean re ${NAME}
