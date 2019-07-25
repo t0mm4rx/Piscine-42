@@ -1,0 +1,6 @@
+Credentials cache: API:D68E3D33-3E44-4961-B498-206C880BB977
+        Principal: tmarx@42.FR
+
+  Issued                Expires               Principal
+Jul  1 09:39:29 2019  Jul  8 09:39:29 2019  krbtgt/42.FR@42.FR
+Jul  1 10:36:10 2019  Jul  8 09:39:29 2019  host/vgs-fn1.42.fr@42.FR
